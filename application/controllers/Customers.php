@@ -16,12 +16,9 @@ class Customers extends REST_Controller
     // Menampilkan data
     public function index_get()
     {
-
         $authHeader = $this->input->get_request_header('Authorization');
         $arr = explode(" ", $authHeader);
         $jwt = isset($arr[1]) ? $arr[1] : "";
-        // print_r($jwt);
-        // die;
         $secretkey = base64_encode("gampang");
         if ($jwt) {
             try {

@@ -20,7 +20,7 @@ class Orders extends REST_Controller
         if ($id == '') {
             $data = $this->db->get('order_details')->result();
             foreach ($data as $row => $key) :
-                $order[] = [
+                $orders[] = [
                     "odID" => $key->odID,
                     "_links" => [
                         (object)[
@@ -153,5 +153,24 @@ class Orders extends REST_Controller
         } else {
             $this->response(array("status" => "fail", 502));
         }
+    }
+
+    // Menghapus data
+    public function index_delete()
+    {
+        $id = $this->delete('id');
+        $this->db->where('odID', $id);
+        $check = $this->db->get('order_details')->num_rows();
+        if ($check == 0) :
+            $this->output->set_header('HTTP/1.1 304 Not Modified');
+        else :
+            $this->db->where('odID', $id);
+            $delete = $this->db->delete('order_details');
+            if ($delete) {
+                $this->response(array("status" => "success", 200));
+            } else {
+                $this->response(array("status" => "fail", 502));
+            }
+        endif;
     }
 }
